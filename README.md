@@ -44,13 +44,12 @@ Same methods with customers and producst.
    sudo systemctl status mysql
 ```  
    Set up the database:  
-   Create a MySQL database named bio_craft_foods.  
-   Update the database connection string in .env file:
+   - Create a MySQL database named bio_craft_foods.  
+   - Update the database connection string in .env file:
    
 ```env
    DATABASE_URL=mysql://username:password@localhost/bio_craft_foods
 ```
-
 Run the database migrations (if any) using SQLx CLI:
 ```bash
     sqlx migrate run
