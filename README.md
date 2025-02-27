@@ -55,10 +55,9 @@ same methods with customers and producst.
 Run the database migrations (if any) using SQLx CLI:
 ```bash
     sqlx migrate run
-   
+```   
 3. **Run  the backend:**
-
-   ```bash
+```bash
    cd ./backend
    cargo run --build
 ```
