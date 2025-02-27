@@ -23,7 +23,7 @@ Same methods with customers and products.
 ## Getting Started
 
 ### Prerequisites
-- npm manager and javascript
+- Javascript and npm manager 
 - Rust and Cargo (install from [rustup.rs](https://rustup.rs/))
 - SQLx CLI (install by: `cargo install sqlx-cli`)
 - MariaDB (install from [MariaDB](https://mariadb.com/downloads/))
