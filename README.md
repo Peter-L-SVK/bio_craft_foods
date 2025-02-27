@@ -47,11 +47,13 @@ same methods with customers and producst.
    Create a MySQL database named bio_craft_foods.
 
    Update the database connection string in .env file:
-   ```env
+   
+```env
    DATABASE_URL=mysql://username:password@localhost/bio_craft_foods
 
-   Run the database migrations (if any) using SQLx CLI:
-   ```bash
+
+Run the database migrations (if any) using SQLx CLI:
+```bash
     sqlx migrate run
    
 3. **Run  the backend:**
