@@ -60,7 +60,7 @@ Run the database migrations (if any) using SQLx CLI:
    cd ./backend
    cargo run --build
 ```
-4. **Run  the backend:**
+4. **Run  the frontend:**
    
    Open s new terminal window (or tab) in bio_craft_foods
    
