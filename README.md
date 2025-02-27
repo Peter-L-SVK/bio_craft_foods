@@ -43,7 +43,7 @@ Same methods with customers and producst.
    cd ./backend
    sudo systemctl status mysql
 ```  
-   Set up the database:
+   Set up the database:  
    Create a MySQL database named bio_craft_foods.  
    Update the database connection string in .env file:
    
