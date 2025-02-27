@@ -27,7 +27,7 @@ Same methods with customers and products.
 - Rust and Cargo (install from [rustup.rs](https://rustup.rs/))
 - SQLx CLI (install by: `cargo install sqlx-cli`)
 - MariaDB (install from [MariaDB](https://mariadb.com/downloads/))
-- React Admin from [React Admin](https://github.com/marmelab/react-admin)
+- React Admin from [React Admin](https://github.com/marmelab/react-admin) (install by `npm install react-admin`)
 
 ### Installation
 
