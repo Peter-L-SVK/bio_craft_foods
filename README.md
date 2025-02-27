@@ -68,7 +68,7 @@ Run the database migrations (if any) using SQLx CLI:
        cd ./frontend
        npm install
        npm run build
-       npm start
+       npm run start
 ```
 4. **Run  the  test:**
     
