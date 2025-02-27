@@ -1,0 +1,9 @@
+use axum::Json;
+use serde_json::{json, Value};
+
+pub async fn list_products() -> Json<Value> {
+    Json(json!([
+        { "id": 1, "name": "Bio Craft Burger" },
+        { "id": 2, "name": "Organic Smoothie" }
+    ]))
+}
