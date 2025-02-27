@@ -15,7 +15,7 @@ Same methods with customers and products.
 
 ## Technologies Used
 
-- **Rust**: A systems programming language that is fast and memory-efficient.
+- **Rust**: A systems C/C++ like programming language that is fast and memory-efficient.
 - **Axum**: A web framework for Rust that focuses on ergonomics and modularity.
 - **SQLx**: An async SQL crate for Rust with compile-time SQL query checking.
 - **MariaDB**: A relational database management system used for storing order data, based of MySQL.
