@@ -10,14 +10,14 @@ This is the backend service for the Bio Craft Foods application, built using Rus
 - **Update Order**: Update an existing order.
 - **Delete Order**: Delete an order by ID.
 
-same methods with customers and producst. 
+Same methods with customers and producst. 
 
 ## Technologies Used
 
 - **Rust**: A systems programming language that is fast and memory-efficient.
 - **Axum**: A web framework for Rust that focuses on ergonomics and modularity.
 - **SQLx**: An async SQL crate for Rust with compile-time SQL query checking.
-- **MAriaDB**: A relational database management system used for storing order data based of MySQL.
+- **MariaDB**: A relational database management system used for storing order data based of MySQL.
 
 ## Getting Started
 
