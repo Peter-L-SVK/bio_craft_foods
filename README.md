@@ -10,7 +10,7 @@ This is the backend service for the Bio Craft Foods application, built using Rus
 - **Update Order**: Update an existing order.
 - **Delete Order**: Delete an order by ID.
 
-Same methods with customers and producst. 
+Same methods with customers and products. 
 
 ## Technologies Used
 
