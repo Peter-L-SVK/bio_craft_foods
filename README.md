@@ -58,7 +58,7 @@ Run the database migrations (if any) using SQLx CLI:
 3. **Run  the backend:**
 ```bash
    cd ./backend
-   cargo run --build
+   cargo run --release
 ```
 4. **Run  the frontend:**
    
