@@ -1,6 +1,7 @@
 # Bio Craft Foods Backend
 
-This is the backend service for the Bio Craft Foods application, built using Rust, Axum, and SQLx. It provides RESTful APIs for managing orders.
+This is the backend service for the Bio Craft Foods application, built using Rust, Axum, and SQLx.  
+It provides RESTful APIs for managing orders.
 
 ## Features
 
