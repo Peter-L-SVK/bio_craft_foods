@@ -62,7 +62,7 @@ Run the database migrations (if any) using SQLx CLI:
 ```
 4. **Run  the frontend:**
    
-   Open s new terminal window (or tab) in bio_craft_foods
+   Open a new terminal window (or tab) in bio_craft_foods
    
 ```bash
        cd ./frontend
