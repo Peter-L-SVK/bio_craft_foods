@@ -1,9 +1,0 @@
-use validator::ValidationError;
-use rust_decimal::Decimal;
-
-pub fn validate_decimal_range(value: &Decimal, min: Decimal) -> Result<(), ValidationError> {
-    if *value < min {
-        return Err(ValidationError::new("Value must be greater than or equal to the minimum"));
-    }
-    Ok(())
-}
