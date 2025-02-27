@@ -39,18 +39,18 @@ same methods with customers and producst.
 2. **Run the sql migration**
     
    Ensure you have MariaDB running.
-   ```bash
+```bash
    cd ./backend
    sudo systemctl status mysql
    
    Set up the database:
    Create a MySQL database named bio_craft_foods.
-
+```
    Update the database connection string in .env file:
    
 ```env
    DATABASE_URL=mysql://username:password@localhost/bio_craft_foods
-
+```
 
 Run the database migrations (if any) using SQLx CLI:
 ```bash
@@ -61,21 +61,21 @@ Run the database migrations (if any) using SQLx CLI:
    ```bash
    cd ./backend
    cargo run --build
-
+```
 4. **Run  the backend:**
    
    Open new terminal window in bio_craft_foods
    
-    ```bash
+```bash
        cd ./frontend
        npm install
        npm run build
        npm run
-
+```
 4. **Run  the  test:**
     
    To run the tests, use the following command:
-   ```bash
+```bash
    cd ./backend
    cargo test
-
+```
