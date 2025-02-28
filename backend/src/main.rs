@@ -31,7 +31,7 @@ async fn main() -> Result<(), AppError> {
         .run(&pool)
         .await
         .map_err(|e| {
-            eprintln!("Failed to run migrations: {:?}", e);
+            println!("Failed to run migrations: {:?}", e);
             AppError::DatabaseError(e.into()) // Convert MigrateError to sqlx::Error
         })?;
 
