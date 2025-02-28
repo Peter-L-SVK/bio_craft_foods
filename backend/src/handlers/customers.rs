@@ -4,14 +4,19 @@ use sqlx::MySqlPool;
 use crate::models::customer::{Customer, CreateCustomer};
 use crate::utils::{AppError, json_response, content_range_header, validate_customer_exists};
 use validator::Validate;
+use tracing::{info, error};
 
 /// List all customers
 pub async fn list_customers(State(pool): State<MySqlPool>) -> Result<(HeaderMap, Json<Value>), AppError> {
     let customers = sqlx::query_as::<_, Customer>("SELECT * FROM customers")
         .fetch_all(&pool)
         .await
-        .map_err(AppError::DatabaseError)?;
+         .map_err(|e| {
+	    error!("Failed to fetch customers: {:?}", e);
+	    AppError::DatabaseError(e)
+	})?;
 
+    info!("Successfully fetched {} customers", customers.len());
     let headers = content_range_header("customers", customers.len());
     Ok((headers, json_response(customers)))
 }

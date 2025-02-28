@@ -6,6 +6,7 @@ use dotenv::dotenv;
 use axum::Router;
 use tracing_subscriber;
 use crate::utils::AppError;
+use tracing::error;
 
 mod utils;
 mod routes;
@@ -31,10 +32,10 @@ async fn main() -> Result<(), AppError> {
         .run(&pool)
         .await
         .map_err(|e| {
-            println!("Failed to run migrations: {:?}", e);
+            error!("Failed to run migrations: {:?}", e);
             AppError::DatabaseError(e.into()) // Convert MigrateError to sqlx::Error
         })?;
-
+    
     // Create the Axum router with all routes
     let app = Router::new()
         .nest("/api", routes::create_routes(pool))

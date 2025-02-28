@@ -4,14 +4,18 @@ use sqlx::MySqlPool;
 use crate::models::order::{Order, CreateOrder};
 use validator::Validate;
 use crate::utils::{AppError, json_response, content_range_header, validate_customer_exists, validate_product_exists};
+use tracing::{info, error};
 
 /// List all orders
 pub async fn list_orders(State(pool): State<MySqlPool>) -> Result<(HeaderMap, Json<Value>), AppError> {
     let orders = sqlx::query_as::<_, Order>("SELECT * FROM orders")
         .fetch_all(&pool)
         .await
-        .map_err(AppError::DatabaseError)?;
-
+        .map_err(|e| {
+	    error!("Failed to fetch orders: {:?}", e);
+	    AppError::DatabaseError(e)
+	})?;
+    info!("Successfully fetched {} orders", orders.len());
     let headers = content_range_header("orders", orders.len());
     Ok((headers, json_response(orders)))
 }

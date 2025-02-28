@@ -19,7 +19,6 @@ pub async fn list_products(State(pool): State<MySqlPool>) -> Result<(HeaderMap, 
         })?;
 
     info!("Successfully fetched {} products", products.len());
-
     let headers = content_range_header("products", products.len());
     Ok((headers, json_response(products)))
 }
