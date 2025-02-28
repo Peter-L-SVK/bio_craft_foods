@@ -42,7 +42,7 @@ Same methods with customers and products.
 ## Technologies Used
 
 - **Rust**: A systems C/C++ like programming language that is fast and memory-efficient.
-- **Tokio**: An asynchronous multithreaded programming framework.
+- **Tokio**: An asynchronous multithreaded runtime.
 - **Axum**: A web framework for Rust that focuses on ergonomics and modularity.
 - **SQLx**: An async SQL crate for Rust with compile-time SQL query checking.
 - **MariaDB**: A relational database management system used for storing data, based of MySQL.
