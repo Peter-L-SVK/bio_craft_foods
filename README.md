@@ -3,7 +3,7 @@
 This is the backend service for the Bio Craft Foods website, built using Rust, Axum, and SQLx.  
 It provides RESTful APIs for managing orders, products and customers.
 
-3#Key Updates for Alpha-2
+##Key Updates for Alpha-2
 -**Error Handling**
 Introduced a custom AppError enum for consistent error handling across the application.  
 Added validation utilities:  
