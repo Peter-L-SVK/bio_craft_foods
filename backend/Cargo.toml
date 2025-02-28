@@ -16,5 +16,6 @@ http = "0.2"
 validator = { version = "0.20", features = ["derive"] }
 rust_decimal = "1.36"
 tracing = "0.1"
+thiserror = "1.0"
 tracing-subscriber = "0.3"
 chrono = { version = "0.4", features = ["serde"] }

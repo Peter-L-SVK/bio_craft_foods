@@ -1,5 +1,6 @@
 use sqlx::MySqlPool;
-use axum::{Router, routing::get};
+#[allow(unused_imports)]
+use axum::{Router, routing::{get, post, put, delete}};
 use crate::handlers::{customers, orders, products};
 
 pub fn create_routes(pool: MySqlPool) -> Router {

@@ -1,10 +1,11 @@
-use axum::http::{header::HeaderName, Method}; 
+use axum::http::{header::HeaderName, Method};
 use tower_http::cors::{CorsLayer, AllowOrigin};
 use sqlx::MySqlPool;
 use std::net::SocketAddr;
 use dotenv::dotenv;
 use axum::Router;
 use tracing_subscriber;
+use crate::utils::AppError;
 
 mod utils;
 mod routes;
@@ -12,24 +13,35 @@ mod handlers;
 mod models;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), AppError> {
+    // Initialize tracing for logging
     tracing_subscriber::fmt::init();
-    dotenv().ok(); // Load the .env file
 
-    // Set up the MariaDB connection pool
-    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    let pool = MySqlPool::connect(&database_url).await.unwrap();
+    // Load environment variables from .env file
+    dotenv().ok();
 
-    // Run migrations
-    sqlx::migrate!().run(&pool).await.unwrap();
+    // Set up the MariaDB/MySQL connection pool
+    let database_url = std::env::var("DATABASE_URL").map_err(|_| AppError::InternalServerError)?;
+    let pool = MySqlPool::connect(&database_url)
+        .await
+        .map_err(AppError::DatabaseError)?;
 
-    // Create routes
+    // Run database migrations
+    sqlx::migrate!()
+        .run(&pool)
+        .await
+        .map_err(|e| {
+            eprintln!("Failed to run migrations: {:?}", e);
+            AppError::DatabaseError(e.into()) // Convert MigrateError to sqlx::Error
+        })?;
+
+    // Create the Axum router with all routes
     let app = Router::new()
         .nest("/api", routes::create_routes(pool))
         .layer(
             CorsLayer::new()
                 .allow_origin(AllowOrigin::exact(
-                    "http://localhost:3001".parse().unwrap(), // Parse the origin as a HeaderValue
+                    "http://localhost:3001".parse().map_err(|_| AppError::InternalServerError)?,
                 ))
                 .allow_methods(vec![
                     Method::GET,
@@ -37,7 +49,7 @@ async fn main() {
                     Method::PUT,
                     Method::DELETE,
                 ])
-                .allow_headers(vec![HeaderName::from_static("content-type")]), // Use HeaderName
+                .allow_headers(vec![HeaderName::from_static("content-type")]),
         );
 
     // Start the server
@@ -46,5 +58,7 @@ async fn main() {
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
-        .unwrap();
+        .map_err(|_| AppError::InternalServerError)?;
+
+    Ok(())
 }

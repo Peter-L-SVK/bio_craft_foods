@@ -1,93 +1,88 @@
 use axum::{Json, extract::{State, Path}, http::HeaderMap};
-use serde_json::{json, Value};
+use serde_json::Value;
 use sqlx::MySqlPool;
 use crate::models::product::{Product, CreateProduct};
-use axum::http::StatusCode;
+use crate::utils::{AppError, json_response, content_range_header};
 use validator::Validate;
 use tracing::{info, error};
 
-pub async fn list_products(State(pool): State<MySqlPool>) -> Result<(HeaderMap, Json<Value>), StatusCode> {
+/// List all products
+pub async fn list_products(State(pool): State<MySqlPool>) -> Result<(HeaderMap, Json<Value>), AppError> {
     info!("Fetching products from the database");
 
-    let products = match sqlx::query_as::<_, Product>("SELECT id, name, description, price, in_stock FROM products")
+    let products = sqlx::query_as::<_, Product>("SELECT * FROM products")
         .fetch_all(&pool)
         .await
-    {
-        Ok(products) => products,
-        Err(e) => {
+        .map_err(|e| {
             error!("Failed to fetch products: {:?}", e);
-            return Err(StatusCode::INTERNAL_SERVER_ERROR);
-        }
-    };
+            AppError::DatabaseError(e)
+        })?;
 
     info!("Successfully fetched {} products", products.len());
 
-    let mut headers = HeaderMap::new();
-    let content_range = if products.is_empty() {
-        "products */0".to_string()
-    } else {
-        format!("products 0-{}/{}", products.len() - 1, products.len())
-    };
-
-    headers.insert("Content-Range", content_range.parse().unwrap());
-
-    Ok((headers, Json(json!({
-        "data": products,
-        "total": products.len(),
-    }))))
+    let headers = content_range_header("products", products.len());
+    Ok((headers, json_response(products)))
 }
 
-
-pub async fn get_product(Path(id): Path<u32>, State(pool): State<MySqlPool>) -> Json<Value> {
+/// Get a specific product by ID
+pub async fn get_product(Path(id): Path<u32>, State(pool): State<MySqlPool>) -> Result<Json<Value>, AppError> {
     let product = sqlx::query_as::<_, Product>("SELECT * FROM products WHERE id = ?")
         .bind(id)
         .fetch_one(&pool)
         .await
-        .unwrap();
+        .map_err(|_| AppError::NotFound)?;
 
-    Json(json!({ "data": product }))
+    Ok(json_response(product))
 }
 
-pub async fn create_product(State(pool): State<MySqlPool>, Json(product): Json<CreateProduct>) -> Result<Json<Value>, StatusCode> {
-    if let Err(_) = product.validate() {
-        return Err(StatusCode::BAD_REQUEST);
-    }
+/// Create a new product
+pub async fn create_product(State(pool): State<MySqlPool>, Json(product): Json<CreateProduct>) -> Result<Json<Value>, AppError> {
+    // Validate the input
+    product.validate().map_err(AppError::ValidationError)?;
 
+    // Insert the new product into the database
     let _ = sqlx::query("INSERT INTO products (name, price, in_stock) VALUES (?, ?, ?)")
         .bind(&product.name)
         .bind(product.price)
         .bind(product.in_stock)
         .execute(&pool)
         .await
-        .unwrap();
+        .map_err(AppError::DatabaseError)?;
 
-    Ok(Json(json!({ "message": "Product created successfully" })))
+    Ok(json_response("Product created successfully"))
 }
 
-pub async fn update_product(Path(id): Path<u32>, State(pool): State<MySqlPool>, Json(product): Json<Product>) -> Json<Value> {
-    let _ = sqlx::query("UPDATE products SET name = ?, description = ?, price = ?, in_stock = ? WHERE id = ?")
+/// Update an existing product
+pub async fn update_product(Path(id): Path<u32>, State(pool): State<MySqlPool>, Json(product): Json<CreateProduct>) -> Result<Json<Value>, AppError> {
+    // Validate the input
+    product.validate().map_err(AppError::ValidationError)?;
+
+    // Update the product in the database
+    let _ = sqlx::query("UPDATE products SET name = ?, price = ?, in_stock = ? WHERE id = ?")
         .bind(&product.name)
-        .bind(&product.description)
         .bind(product.price)
         .bind(product.in_stock)
         .bind(id)
         .execute(&pool)
         .await
-        .unwrap();
+        .map_err(AppError::DatabaseError)?;
 
-    Json(json!({ "message": "Product updated successfully" }))
+    Ok(json_response("Product updated successfully"))
 }
 
-pub async fn delete_product(Path(id): Path<u32>, State(pool): State<MySqlPool>) -> Result<Json<Value>, StatusCode> {
+/// Delete a product by ID
+pub async fn delete_product(Path(id): Path<u32>, State(pool): State<MySqlPool>) -> Result<Json<Value>, AppError> {
+    // Delete the product from the database
     let result = sqlx::query("DELETE FROM products WHERE id = ?")
         .bind(id)
         .execute(&pool)
-        .await;
+        .await
+        .map_err(AppError::DatabaseError)?;
 
-    match result {
-        Ok(result) if result.rows_affected() > 0 => Ok(Json(json!({ "message": "Product deleted successfully" }))),
-        Ok(_) => Err(StatusCode::NOT_FOUND),
-        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
+    // Check if the product was actually deleted
+    if result.rows_affected() == 0 {
+        return Err(AppError::NotFound);
     }
-}
 
+    Ok(json_response("Product deleted successfully"))
+}
