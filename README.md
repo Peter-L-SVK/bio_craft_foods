@@ -4,6 +4,7 @@ This is the backend service for the Bio Craft Foods website, built using Rust, A
 It provides RESTful APIs for managing orders, products and customers.
 
 ##Key Updates for Alpha-2
+>>>>>>> 9cba1bb3302aedd74fe89267a5ff19272a1f397b
 -**Error Handling**
 Introduced a custom AppError enum for consistent error handling across the application.  
 Added validation utilities:  
