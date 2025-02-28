@@ -39,9 +39,9 @@ pub async fn create_product(State(pool): State<MySqlPool>, Json(product): Json<C
     // Validate the input
     product.validate().map_err(AppError::ValidationError)?;
 
-    // Insert the new product into the database
-    let _ = sqlx::query("INSERT INTO products (name, price, in_stock) VALUES (?, ?, ?)")
+    let _ = sqlx::query("INSERT INTO products (name, price, in_stock) VALUES (?, ?, ?, ?)")
         .bind(&product.name)
+	.bind(&product.description)
         .bind(product.price)
         .bind(product.in_stock)
         .execute(&pool)
@@ -56,9 +56,9 @@ pub async fn update_product(Path(id): Path<u32>, State(pool): State<MySqlPool>, 
     // Validate the input
     product.validate().map_err(AppError::ValidationError)?;
 
-    // Update the product in the database
-    let _ = sqlx::query("UPDATE products SET name = ?, price = ?, in_stock = ? WHERE id = ?")
+    let _ = sqlx::query("UPDATE products SET name = ?, description = ?   price = ?, in_stock = ? WHERE id = ?")
         .bind(&product.name)
+	.bind(&product.description)
         .bind(product.price)
         .bind(product.in_stock)
         .bind(id)
@@ -71,7 +71,6 @@ pub async fn update_product(Path(id): Path<u32>, State(pool): State<MySqlPool>, 
 
 /// Delete a product by ID
 pub async fn delete_product(Path(id): Path<u32>, State(pool): State<MySqlPool>) -> Result<Json<Value>, AppError> {
-    // Delete the product from the database
     let result = sqlx::query("DELETE FROM products WHERE id = ?")
         .bind(id)
         .execute(&pool)
