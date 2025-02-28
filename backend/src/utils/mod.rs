@@ -100,7 +100,7 @@ pub async fn validate_product_exists(pool: &sqlx::MySqlPool, product_id: i32) ->
 
 // Validation function for dates (e.g., order date must be after 2020-01-01)
 pub fn validate_date(date: &NaiveDate) -> Result<(), ValidationError> {
-    let min_date = NaiveDate::from_ymd_opt(2020, 1, 1).expect("Invalid date"); // Use `from_ymd_opt` and handle the `Option`
+    let min_date = NaiveDate::from_ymd_opt(2020, 1, 1).expect("Invalid date");
     if *date < min_date {
         return Err(ValidationError::new("Date must be after 2020-01-01"));
     }
