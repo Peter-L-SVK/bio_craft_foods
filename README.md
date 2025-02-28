@@ -8,21 +8,21 @@ It provides RESTful APIs for managing orders, products and customers.
 - **Error Handling:**  
 Introduced a custom AppError enum for consistent error handling across the application.  
 Added validation utilities:  
-validate_date: Ensures order dates are valid (e.g., after 2020-01-01).  
-validate_customer_exists: Checks if a customer exists before creating or updating an order.  
-validate_product_exists: Checks if a product exists before creating or updating an order.  
+&nbsp;&nbsp;&nbsp;&nbsp;validate_date: Ensures order dates are valid (e.g., after 2020-01-01).  
+&nbsp;&nbsp;&nbsp;&nbsp;validate_customer_exists: Checks if a customer exists before creating or updating an order.  
+&nbsp;&nbsp;&nbsp;&nbsp;validate_product_exists: Checks if a product exists before creating or updating an order.  
 
 - **Route Handlers:**  
 Updated handlers for customers, orders, and products:  
-customers.rs, orders.rs, and products.rs now use AppError for error handling.  
-Utility functions like json_response and content_range_header are used for consistent responses.  
-Added date validation for orders using validate_date.  
+&nbsp;&nbsp;&nbsp;&nbsp;customers.rs, orders.rs, and products.rs now use AppError for error handling.  
+&nbsp;&nbsp;&nbsp;&nbsp;Utility functions like json_response and content_range_header are used for consistent responses.  
+&nbsp;&nbsp;&nbsp;&nbsp;Added date validation for orders using validate_date.  
 
 - **Code Cleanup:**  
 Ensured all handlers and routes are consistent and well-organized.  
 Removed redundant code.  
 
-- **Testing with Postman:**
+- **Testing with Postman:**  
 Kept post, put, and delete imports for testing API endpoints with Postman.  
 
 - **Logging:**  
