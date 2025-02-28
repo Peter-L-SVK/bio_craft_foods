@@ -8,9 +8,9 @@ It provides RESTful APIs for managing orders, products and customers.
 - **Error Handling:**  
 Introduced a custom AppError enum for consistent error handling across the application.  
 Added validation utilities:  
-validate_date: Ensures order dates are valid (e.g., after 2020-01-01).  
-validate_customer_exists: Checks if a customer exists before creating or updating an order.  
-validate_product_exists: Checks if a product exists before creating or updating an order.  
+&nbsp;&nbsp;&nbsp;validate_date: Ensures order dates are valid (e.g., after 2020-01-01).  
+&nbsp;&nbsp;&nbsp;validate_customer_exists: Checks if a customer exists before creating or updating an order.  
+&nbsp;&nbsp;&nbsp;validate_product_exists: Checks if a product exists before creating or updating an order.  
 
 - **Route Handlers:**  
 Updated handlers for customers, orders, and products:  
