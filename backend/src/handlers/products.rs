@@ -39,9 +39,10 @@ pub async fn create_product(State(pool): State<MySqlPool>, Json(product): Json<C
     // Validate the input
     product.validate().map_err(AppError::ValidationError)?;
 
-    let _ = sqlx::query("INSERT INTO products (name, price, in_stock) VALUES (?, ?, ?, ?)")
+    // Insert the new product into the database
+    let _ = sqlx::query("INSERT INTO products (name, description, price, in_stock) VALUES (?, ?, ?, ?)")
         .bind(&product.name)
-	.bind(&product.description)
+        .bind(&product.description) // Handle Option<String> properly
         .bind(product.price)
         .bind(product.in_stock)
         .execute(&pool)
@@ -70,8 +71,8 @@ pub async fn update_product(Path(id): Path<u32>, State(pool): State<MySqlPool>, 
 }
 
 /// Delete a product by ID
-pub async fn delete_product(Path(id): Path<u32>, State(pool): State<MySqlPool>) -> Result<Json<Value>, AppError> {
-    let result = sqlx::query("DELETE FROM products WHERE id = ?")
+pub async fn delete_product(Path(id): Path<i32>, State(pool): State<MySqlPool>) -> Result<Json<Value>, AppError> {
+     let result = sqlx::query("DELETE FROM products WHERE id = ?")
         .bind(id)
         .execute(&pool)
         .await
