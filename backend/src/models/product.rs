@@ -17,6 +17,7 @@ pub struct Product {
 pub struct CreateProduct {
     #[validate(length(min = 1, message = "Name is required"))]
     pub name: String,
+    pub description: Option<String>,
     #[validate(custom(function = "validate_decimal_range"))]
     pub price: Decimal,
     pub in_stock: bool,

@@ -56,7 +56,7 @@ pub async fn update_product(Path(id): Path<u32>, State(pool): State<MySqlPool>, 
     // Validate the input
     product.validate().map_err(AppError::ValidationError)?;
 
-    let _ = sqlx::query("UPDATE products SET name = ?, description = ?   price = ?, in_stock = ? WHERE id = ?")
+    let _ = sqlx::query("UPDATE products SET name = ?, description = ?,   price = ?, in_stock = ? WHERE id = ?")
         .bind(&product.name)
 	.bind(&product.description)
         .bind(product.price)
