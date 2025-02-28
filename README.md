@@ -5,27 +5,27 @@ It provides RESTful APIs for managing orders, products and customers.
 
 ## Key Updates for Alpha-2
 
-- **Error Handling:**
+- **Error Handling:**  
 Introduced a custom AppError enum for consistent error handling across the application.  
 Added validation utilities:  
 validate_date: Ensures order dates are valid (e.g., after 2020-01-01).  
 validate_customer_exists: Checks if a customer exists before creating or updating an order.  
 validate_product_exists: Checks if a product exists before creating or updating an order.  
 
-- **Route Handlers:**
+- **Route Handlers:**  
 Updated handlers for customers, orders, and products:  
 customers.rs, orders.rs, and products.rs now use AppError for error handling.  
 Utility functions like json_response and content_range_header are used for consistent responses.  
 Added date validation for orders using validate_date.  
 
-- **Code Cleanup:**
+- **Code Cleanup:**  
 Ensured all handlers and routes are consistent and well-organized.  
 Removed redundant code.  
 
 - **Testing with Postman:**
 Kept post, put, and delete imports for testing API endpoints with Postman.  
 
-- **Logging:**
+- **Logging:**  
 Added tracing logs for better observability and debugging.  
 Logs are included for key operations like database queries and validation checks.  
 
