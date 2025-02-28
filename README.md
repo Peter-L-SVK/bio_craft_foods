@@ -14,9 +14,9 @@ Added validation utilities:
 
 - **Route Handlers:**  
 Updated handlers for customers, orders, and products:  
-customers.rs, orders.rs, and products.rs now use AppError for error handling.  
-Utility functions like json_response and content_range_header are used for consistent responses.  
-Added date validation for orders using validate_date.  
+&nbsp;&nbsp;&nbsp;&nbsp;customers.rs, orders.rs, and products.rs now use AppError for error handling.  
+&nbsp;&nbsp;&nbsp;&nbsp;Utility functions like json_response and content_range_header are used for consistent responses.  
+&nbsp;&nbsp;&nbsp;&nbsp;Added date validation for orders using validate_date.  
 
 - **Code Cleanup:**  
 Ensured all handlers and routes are consistent and well-organized.  
