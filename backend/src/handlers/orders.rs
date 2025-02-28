@@ -2,7 +2,7 @@ use axum::{Json, extract::{State, Path}, http::HeaderMap};
 use serde_json::Value;
 use sqlx::MySqlPool;
 use crate::models::order::{Order, CreateOrder};
-use validator::Validate;
+use validator::{Validate, ValidationErrors};
 use crate::utils::{AppError, json_response, content_range_header, validate_customer_exists, validate_product_exists};
 use tracing::{info, error};
 
@@ -37,7 +37,11 @@ pub async fn create_order(State(pool): State<MySqlPool>, Json(order): Json<Creat
     order.validate().map_err(AppError::ValidationError)?;
 
     // Validate the order date
-    crate::utils::validate_date(&order.order_date).map_err(AppError::ValidationError)?;
+    crate::utils::validate_date(&order.order_date).map_err(|e| {
+        let mut errors = ValidationErrors::new();
+        errors.add("order_date", e); // Convert ValidationError to ValidationErrors
+        AppError::ValidationError(errors)
+    })?;
 
     // Check if the customer exists
     validate_customer_exists(&pool, order.customer_id).await?;
@@ -64,7 +68,11 @@ pub async fn update_order(Path(id): Path<i32>, State(pool): State<MySqlPool>, Js
     order.validate().map_err(AppError::ValidationError)?;
 
     // Validate the order date
-    crate::utils::validate_date(&order.order_date).map_err(AppError::ValidationError)?;
+    crate::utils::validate_date(&order.order_date).map_err(|e| {
+        let mut errors = ValidationErrors::new();
+        errors.add("order_date", e); // Convert ValidationError to ValidationErrors
+        AppError::ValidationError(errors)
+    })?;
 
     // Check if the customer exists
     validate_customer_exists(&pool, order.customer_id).await?;

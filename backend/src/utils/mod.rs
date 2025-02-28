@@ -1,13 +1,13 @@
-use axum::http::HeaderMap;
+use axum::{http::HeaderMap, Json, http::StatusCode, response::{IntoResponse, Response}};
 use serde::Serialize;
 use serde_json::{json, Value};
 use sqlx::Error as SqlxError;
 use validator::{ValidationError, ValidationErrors};
 use rust_decimal::Decimal;
-use axum::response::{IntoResponse, Response};
-use axum::http::StatusCode;
 use thiserror::Error;
-use axum::Json;
+use chrono::NaiveDate;
+use tracing::error;
+
 
 // Custom error type for the application
 #[derive(Error, Debug)]
@@ -15,7 +15,7 @@ pub enum AppError {
     #[error("Database error: {0}")]
     DatabaseError(#[from] SqlxError),
     #[error("Validation error: {0}")]
-    ValidationError(#[from] ValidationErrors),
+    ValidationError(ValidationErrors),
     #[error("Resource not found")]
     NotFound,
     #[allow(dead_code)]
@@ -98,15 +98,11 @@ pub async fn validate_product_exists(pool: &sqlx::MySqlPool, product_id: i32) ->
     Ok(())
 }
 
-pub fn validate_date(date: &chrono::NaiveDate) -> Result<(), ValidationErrors> {
-    let min_date = chrono::NaiveDate::from_ymd_opt(2020, 1, 1);
-    if *date < min_date.expect("REASON") {
-        let mut errors = ValidationErrors::new();
-        errors.add(
-            "order_date",
-            ValidationError::new("Date must be after 2020-01-01"),
-        );
-        return Err(errors);
+// Validation function for dates (e.g., order date must be after 2020-01-01)
+pub fn validate_date(date: &NaiveDate) -> Result<(), ValidationError> {
+    let min_date = NaiveDate::from_ymd_opt(2020, 1, 1).expect("Invalid date"); // Use `from_ymd_opt` and handle the `Option`
+    if *date < min_date {
+        return Err(ValidationError::new("Date must be after 2020-01-01"));
     }
     Ok(())
 }
