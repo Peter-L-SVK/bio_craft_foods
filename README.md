@@ -1,6 +1,6 @@
 # Bio Craft Foods Backend
 
-This is the asynchronous backend service for the Bio Craft Foods mockup website, built using Rust, Axum, and SQLx.  
+This is the asynchronous backend service for the Bio Craft Foods mockup website, built using Rust, Tokio, Axum, and SQLx.  
 It provides RESTful APIs for managing orders, products and customers.
 
 ## Key Updates for Alpha-2
