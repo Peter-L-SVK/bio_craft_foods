@@ -3,13 +3,38 @@
 This is the backend service for the Bio Craft Foods website, built using Rust, Axum, and SQLx.  
 It provides RESTful APIs for managing orders, products and customers.
 
+#Key Updates for Alpha-2
+-**Error Handling**
+Introduced a custom AppError enum for consistent error handling across the application.  
+Added validation utilities:  
+validate_date: Ensures order dates are valid (e.g., after 2020-01-01).  
+validate_customer_exists: Checks if a customer exists before creating or updating an order.  
+validate_product_exists: Checks if a product exists before creating or updating an order.  
+
+-**Route Handlers**
+Updated handlers for customers, orders, and products:  
+customers.rs, orders.rs, and products.rs now use AppError for error handling.  
+Utility functions like json_response and content_range_header are used for consistent responses.  
+Added date validation for orders using validate_date.  
+
+-**Code Cleanup**
+Ensured all handlers and routes are consistent and well-organized.  
+Removed redundant code.  
+
+-**Testing with Postman**
+Kept post, put, and delete imports for testing API endpoints with Postman.
+
+-**Logging**
+Added tracing logs for better observability and debugging.  
+Logs are included for key operations like database queries and validation checks.  
+
 ## Features
 
 - **List Orders**: Retrieve a list of all orders.
 - **Get Order**: Retrieve details of a specific order by ID.
 - **Create Order**: Create a new order.
 - **Update Order**: Update an existing order.
-- **Delete Order**: Delete an order by ID.
+- **Delete Order**: Delete an order by ID.  
 
 Same methods with customers and products. 
 
