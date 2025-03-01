@@ -46,6 +46,7 @@ Same methods with customers and products.
 - **Axum**: A web framework for Rust that focuses on ergonomics and modularity.
 - **SQLx**: An async SQL crate for Rust with compile-time SQL query checking.
 - **MariaDB**: A relational database management system used for storing data, based of MySQL.
+- **react-admin**: A frontend Framework for single-page applications on top of REST/GraphQL APIs, using TypeScript, React and Material Design
 
 ## Getting Started
 
