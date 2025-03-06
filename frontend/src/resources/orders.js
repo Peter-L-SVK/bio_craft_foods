@@ -10,12 +10,19 @@ import {
     DateInput,
     Show,
     SimpleShowLayout,
+    BulkDeleteButton,
 } from 'react-admin';
 import { required, number } from 'react-admin';
 
+const OrderBulkActionButtons = (props) => (
+    <React.Fragment>
+        <BulkDeleteButton {...props} />
+    </React.Fragment>
+);
+
 export const OrderList = () => (
     <List>
-        <Datagrid rowClick="edit">
+        <Datagrid rowClick="edit" bulkActionButtons={<OrderBulkActionButtons />}>
             <TextField source="id" />
             <TextField source="customer_id" />
             <TextField source="product_id" />
@@ -24,6 +31,7 @@ export const OrderList = () => (
         </Datagrid>
     </List>
 );
+
 
 export const OrderCreate = () => (
     <Create>

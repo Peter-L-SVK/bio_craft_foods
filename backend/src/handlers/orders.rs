@@ -2,7 +2,7 @@ use axum::{Json, extract::{State, Path}, http::HeaderMap};
 use serde_json::Value;
 use sqlx::MySqlPool;
 use crate::models::order::{Order, CreateOrder};
-use validator::{Validate, ValidationErrors};
+use validator::{Validate, ValidationError, ValidationErrors};
 use crate::utils::{AppError, json_response, content_range_header, validate_customer_exists, validate_product_exists};
 use tracing::{info, error};
 
@@ -109,4 +109,37 @@ pub async fn delete_order(Path(id): Path<i32>, State(pool): State<MySqlPool>) ->
     }
 
     Ok(json_response("Order deleted successfully"))
+}
+
+/// Delete multiple orders by IDs
+pub async fn delete_orders(State(pool): State<MySqlPool>, Json(ids): Json<Vec<i32>>) -> Result<Json<Value>, AppError> {
+    if ids.is_empty() {
+        let mut errors = ValidationErrors::new();
+        errors.add("ids", ValidationError::new("No IDs provided"));
+        return Err(AppError::ValidationError(errors));
+    }
+
+    // Construct the query with placeholders for each ID
+    let query = format!(
+        "DELETE FROM orders WHERE id IN ({})",
+        ids.iter().map(|_| "?").collect::<Vec<_>>().join(",")
+    );
+
+    // Execute the query
+    let mut query = sqlx::query(&query);
+    for id in ids.iter() {
+        query = query.bind(id);
+    }
+
+    let result = query
+        .execute(&pool)
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+    if result.rows_affected() == 0 {
+        return Err(AppError::NotFound);
+    }
+
+    // Return the deleted IDs in the `data` field
+    Ok(json_response(ids))
 }

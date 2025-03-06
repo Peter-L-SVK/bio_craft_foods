@@ -90,24 +90,24 @@ const dataProvider = {
         };
     },
     create: async (resource, params) => {
-    const url = `${apiUrl}/${resource}`;
-    console.log("Creating resource at:", url); // Log the URL
-    console.log("Request payload:", params.data); // Log the payload
+        const url = `${apiUrl}/${resource}`;
+        console.log("Creating resource at:", url); // Log the URL
+        console.log("Request payload:", params.data); // Log the payload
 
-    try {
-        const { json } = await httpClient(url, {
-            method: 'POST',
-            body: JSON.stringify(params.data),
-        });
-        console.log("Backend response:", json); // Log the backend response
-        return {
-            data: { ...params.data, id: json.id },
-        };
-    } catch (error) {
-        console.error("Error creating resource:", error); // Log any errors
-        throw error;
-    }
-},
+        try {
+            const { json } = await httpClient(url, {
+                method: 'POST',
+                body: JSON.stringify(params.data),
+            });
+            console.log("Backend response:", json); // Log the backend response
+            return {
+                data: { ...params.data, id: json.id },
+            };
+        } catch (error) {
+            console.error("Error creating resource:", error); // Log any errors
+            throw error;
+        }
+    },
     delete: async (resource, params) => {
         const url = `${apiUrl}/${resource}/${params.id}`;
         const { json } = await httpClient(url, {
@@ -118,14 +118,26 @@ const dataProvider = {
         };
     },
     deleteMany: async (resource, params) => {
-        const url = `${apiUrl}/${resource}`;
-        const { json } = await httpClient(url, {
-            method: 'DELETE',
-            body: JSON.stringify(params.ids),
-        });
-        return {
-            data: json.data,
-        };
+        //const url = `${apiUrl}/${resource}`;
+        const url = `${apiUrl}/${resource}/bulk-delete`;
+
+        console.log("Deleting multiple records from:", url); // Log the URL
+        console.log("IDs to delete:", params.ids); // Log the IDs to delete
+
+        try {
+            const { json } = await httpClient(url, {
+                //method: 'DELETE',
+                method: 'POST',
+                body: JSON.stringify(params.ids),
+            });
+            console.log("Backend response for deleteMany:", json); // Log the backend response
+            return {
+                data: json.data || params.ids, // Ensure the response includes the deleted IDs
+            };
+        } catch (error) {
+            console.error("Error deleting multiple records:", error); // Log any errors
+            throw error;
+        }
     },
 };
 

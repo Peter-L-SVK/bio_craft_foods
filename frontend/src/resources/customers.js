@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { List, Datagrid, TextField, Edit, Create, SimpleForm, TextInput, Show, SimpleShowLayout } from 'react-admin';
+import { List, Datagrid, TextField, Edit, Create, SimpleForm, TextInput, Show, SimpleShowLayout, BulkDeleteButton } from 'react-admin';
 import { required, email } from 'react-admin';
 
 export const CustomerList = () => (

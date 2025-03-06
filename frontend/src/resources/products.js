@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { List, Datagrid, TextField, Edit, Create, SimpleForm, TextInput, NumberInput, BooleanInput, Show, Filter, SearchInput, SimpleShowLayout } from 'react-admin';
+import { List, Datagrid, TextField, Edit, Create, SimpleForm, TextInput, NumberInput, BooleanInput, Show, Filter, SearchInput, SimpleShowLayout, BulkDeleteButton } from 'react-admin';
 import { required, number } from 'react-admin';
 
 const ProductFilter = (props) => (
@@ -8,9 +8,15 @@ const ProductFilter = (props) => (
     </Filter>
 );
 
+const ProductBulkActionButtons = (props) => (
+    <React.Fragment>
+        <BulkDeleteButton {...props} />
+    </React.Fragment>
+);
+
 export const ProductList = () => (
     <List filters={<ProductFilter />} onSuccess={(data) => console.log("Fetched data in ProductList:", data)}>
-        <Datagrid rowClick="edit">
+        <Datagrid rowClick="edit" bulkActionButtons={<ProductBulkActionButtons />}>
             <TextField source="id" />
             <TextField source="name" />
             <TextField source="description" />

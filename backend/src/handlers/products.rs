@@ -5,6 +5,7 @@ use crate::models::product::{Product, CreateProduct};
 use crate::utils::{AppError, json_response, content_range_header};
 use validator::Validate;
 use tracing::{info, error};
+use validator::{ValidationErrors, ValidationError};
 
 /// List all products
 pub async fn list_products(State(pool): State<MySqlPool>) -> Result<(HeaderMap, Json<Value>), AppError> {
@@ -84,4 +85,37 @@ pub async fn delete_product(Path(id): Path<i32>, State(pool): State<MySqlPool>) 
     }
 
     Ok(json_response("Product deleted successfully"))
+}
+
+/// Delete multiple products by IDs
+pub async fn delete_products(State(pool): State<MySqlPool>, Json(ids): Json<Vec<i32>>) -> Result<Json<Value>, AppError> {
+    if ids.is_empty() {
+        let mut errors = ValidationErrors::new();
+        errors.add("ids", ValidationError::new("No IDs provided"));
+        return Err(AppError::ValidationError(errors));
+    }
+
+    // Construct the query with placeholders for each ID
+    let query = format!(
+        "DELETE FROM products WHERE id IN ({})",
+        ids.iter().map(|_| "?").collect::<Vec<_>>().join(",")
+    );
+
+    // Execute the query
+    let mut query = sqlx::query(&query);
+    for id in ids.iter() {
+        query = query.bind(id);
+    }
+
+    let result = query
+        .execute(&pool)
+        .await
+        .map_err(AppError::DatabaseError)?;
+
+    if result.rows_affected() == 0 {
+        return Err(AppError::NotFound);
+    }
+
+    // Return the deleted IDs in the `data` field
+    Ok(json_response(ids))
 }
