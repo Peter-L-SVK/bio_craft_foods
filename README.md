@@ -62,7 +62,7 @@ Same methods with customers and products.
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/bio_craft_foods.git
+   git@github.com:Peter-L-SVK/bio_craft_foods.git
    cd bio_craft_foods
 
 2. **Run the sql migration**
