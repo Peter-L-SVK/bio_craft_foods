@@ -1,7 +1,11 @@
 # Bio Craft Foods Backend
 
-This is the asynchronous backend service for the Bio Craft Foods mockup website, built using Rust, Tokio, Axum, and SQLx. 
+This is the asynchronous backend service for the Bio Craft Foods mockup website, built using Rust, Tokio, Axum, and SQLx.
+For for admin page, react-admin is used.
 It provides RESTful APIs for managing orders, products and customers.
+
+![Admin page demo Demo](demo.png)
+ *(Backend and admin frontend running)*
 
 ## Key Updates for Alpha-2
 
@@ -62,7 +66,7 @@ Same methods with customers and products.
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/bio_craft_foods.git
+   git@github.com:Peter-L-SVK/bio_craft_foods.git
    cd bio_craft_foods
 
 2. **Run the sql migration**
